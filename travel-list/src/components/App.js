@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "./Logo";
 import Form from "./Form";
 import { PackingList } from "./PackingList";
 import { Stats } from "./Stats";
 
 const App = () => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    // Retrieve items from localStorage on initial load
+    const savedItems = localStorage.getItem("packingItems");
+    return savedItems ? JSON.parse(savedItems) : [];
+  });
+  // Save items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("packingItems", JSON.stringify(items));
+  }, [items]);
   const handleAddItems = (item) => {
     setItems((items) => [...items, item]);
   };
